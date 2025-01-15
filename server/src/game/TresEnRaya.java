@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Arrays;
+
 public class TresEnRaya {
     private char[][] board;
 
@@ -69,9 +71,19 @@ public class TresEnRaya {
     }
 
 
-    // getter setter
+    // toString
 
-    public char[][] getBoard() {
-        return board;
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                result.append(board[i][j]);
+            }
+            result.append("\n");
+        }
+
+        return result.toString();
     }
 }
