@@ -1,22 +1,17 @@
-package server.game;
+package server.tresEnRaya;
 
-import java.util.Arrays;
-
-public class TresEnRaya {
+public class GameRules {
     private char[][] board;
 
-    public TresEnRaya() {
-        this.board = new char[][]{
-                {'-', '-', '-'},
-                {'-', '-', '-'},
-                {'-', '-', '-'}
-        };
+    public GameRules(char[][] board) {
+        this.board = board;
     }
+
+
 
     public boolean play(int p1, int p2, int turn) {
         // seleccionar la pieza segun el turno
         char piece = turn == 1 ? 'o' : 'x';
-
         // colocar la pieza
         board[p1][p2] = piece;
 
@@ -68,22 +63,5 @@ public class TresEnRaya {
         int right = direction.equals("right") || direction.equals("initial") ? verifyLeftDiagonal(p1 + 1, p2 + 1, piece, "right") : 0;
         int left = direction.equals("left") || direction.equals("initial") ? verifyLeftDiagonal(p1 - 1, p2 - 1, piece, "left") : 0;
         return 1 + right + left;
-    }
-
-
-    // toString
-
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                result.append(board[i][j]);
-            }
-            result.append("\n");
-        }
-
-        return result.toString();
     }
 }

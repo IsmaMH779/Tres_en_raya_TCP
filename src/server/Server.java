@@ -1,20 +1,22 @@
 package server;
 
-import server.game.Match;
+import data.Match;
+import server.tresEnRaya.GameThread;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class MainServer {
+public class Server {
 
-    int port;
-    Match match;
+    private int port;
 
-    public MainServer(int port) {
+    private Match match;
+
+    private Server(int port ) {
         this.port = port;
-        this.match = new Match();
+        match = new Match();
     }
 
     public  void listen() {
@@ -32,7 +34,7 @@ public class MainServer {
                 System.out.println( clientAdress + " connected");
 
                 // lanzar el thread y establecer la comunicacion
-                PlayerThread playerThread = new PlayerThread(clientSocket, match);
+                GameThread playerThread = new GameThread(clientSocket, match);
                 Thread player = new Thread(playerThread);
                 player.start();
             }
@@ -46,8 +48,7 @@ public class MainServer {
     }
 
     public static void main(String[] args) {
-        MainServer srv = new MainServer(5558);
+        Server srv = new Server(5558);
         srv.listen();
     }
-
 }
