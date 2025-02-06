@@ -24,6 +24,10 @@ public class GameRules {
         return horizontalCount == 3 || verifyCount == 3 || rightDiagonal == 3 || leftDiagonal == 3;
     }
 
+    public char[][] getBoard() {
+        return board;
+    }
+
     // Verificar de forma horizontal
     private int verifyHorizontal(int p1, int p2, char piece, String direction) {
         if (p1 < 0 || p1 >= 3 || p2 < 0 || p2 >= 3 || board[p1][p2] != piece) {

@@ -8,7 +8,7 @@ public class Match implements Serializable {
     private int turn;
     private int winner;
     private int movesCount;
-    private String[] position;
+    private int[] position;
 
     public Match() {
         // inicializar el board con '-'
@@ -33,6 +33,15 @@ public class Match implements Serializable {
         this.board = board;
     }
 
+    public void updateMatch (Match match) {
+        setBoard(match.getBoard());
+        setWinner(match.getWinner());
+        setTurn(match.getTurn());
+        setPosition(match.getPosition());
+        setPlayersCount(match.getPlayersCount());
+        setMovesCount(match.getMovesCount());
+    }
+
     public int getPlayersCount() {
         return playersCount;
     }
@@ -41,7 +50,7 @@ public class Match implements Serializable {
         this.playersCount = playersCount;
     }
 
-    public void setPosition(String[] position) {
+    public void setPosition(int[] position) {
         this.position = position;
     }
 
@@ -69,7 +78,7 @@ public class Match implements Serializable {
         this.movesCount = movesCount;
     }
 
-    public String[] getPosition() {
+    public int[] getPosition() {
         return position;
     }
 }

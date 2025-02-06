@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Array;
 import java.util.Scanner;
 
 public class Client extends Thread{
@@ -22,6 +23,9 @@ public class Client extends Thread{
     private int playerNumber;
     private Scanner sc;
 
+    private ObjectOutputStream oos;
+    private ObjectInputStream ooi;
+
     // constructor
     public Client(String hostname, int port) {
         try {
@@ -35,6 +39,9 @@ public class Client extends Thread{
 
             outputMessage = new PrintStream(out);
             inputMessage = new BufferedReader(new InputStreamReader(in));
+
+            oos = new ObjectOutputStream(out);
+            ooi = new ObjectInputStream(in);
 
             sc = new Scanner(System.in);
 
@@ -72,6 +79,24 @@ public class Client extends Thread{
                 System.out.println("Turno del jugador " + match.getTurn());
                 showBoard(match);
 
+                if ( match.getWinner() != 0 ) {
+                    if (match.getWinner() == playerNumber) {
+                        System.out.println("¡Felicidades has ganado!");
+                        socket.close();
+                        return;
+                    } else {
+                        System.out.println("Ha ganado el jugador " + match.getWinner() + " suerte la proxima.");
+                        socket.close();
+                        return;
+                    }
+                }
+
+                if (match.getMovesCount() == 9) {
+                    System.out.println("Habeis empatado.");
+                    socket.close();
+                    return;
+                }
+
                 if (playerNumber == match.getTurn()) {
                     // Es tu turno
                     System.out.println("Es tu turno.");
@@ -81,6 +106,9 @@ public class Client extends Thread{
                     outputMessage.println("MOVE");
                     outputMessage.flush();
                     sendMatchStatus();
+
+                    outputMessage.println("GET_STATUS");
+                    getMatchStatus();
                 } else {
                     // No es tu turno, espera y actualiza el estado del juego
                     System.out.println("Espera tu turno...");
@@ -93,9 +121,8 @@ public class Client extends Thread{
 
     }
 
-    private void waitMyTurn() {
+    private void waitMyTurn() throws InterruptedException {
         while (match.getTurn() != playerNumber) {
-            try {
                 // Enviar solicitud para obtener el estado del juego
                 outputMessage.println("GET_STATUS");
                 outputMessage.flush();
@@ -103,18 +130,12 @@ public class Client extends Thread{
                 // Obtener el estado del juego
                 getMatchStatus();
 
-                System.out.println("Turno actual: " + match.getTurn() + " (Jugador: " + playerNumber + ")");
-                // Pausar antes de la siguiente solicitud
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException("Error durante la espera: " + e.getMessage());
-            }
+                Thread.sleep(500);
         }
     }
 
     private void sendMatchStatus() {
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(out);
             oos.reset();
 
             oos.writeObject(match);
@@ -125,19 +146,41 @@ public class Client extends Thread{
     }
     // esperar a la jugada y despues cambiar el turno del jugador
     private void playerMove() {
-        System.out.print("Haz tu jugada (p1,p2) -> ");
-        String positionString = sc.nextLine();
-        String[] position = positionString.split(",");
+        boolean waitingMove = true;
+        String positionString = "";
+        String regex = "^[1-3],[1-3]$";
+        String[] position;
 
-        match.setPosition(position);
-        match.setTurn(match.getTurn() == 1 ? 2 : 1);
+        while (waitingMove) {
+            System.out.print("Haz tu jugada (p1,p2) -> ");
+            positionString = sc.nextLine();
+
+            if (positionString.matches(regex)) {
+                waitingMove = false;
+            } else {
+                System.out.println("\nFormato inválido.");
+                System.out.println("Normas:  Ingresa la jugada en el formato correcto: (ej. 1,1). El numero debe estar entre el 1 y el 3\n");
+            }
+
+            position = positionString.split(",");
+            int p1 = Integer.parseInt(position[0]) - 1;
+            int p2 = Integer.parseInt(position[1]) - 1;
+
+            if (match.getBoard()[p1][p2] != '-') {
+                System.out.println("Tu jugada debe ser en un campo vacio ('-')");
+            } else {
+
+                match.setPosition(new int[]{p1, p2});
+                match.setTurn(match.getTurn() == 1 ? 2 : 1);
+                match.setMovesCount(match.getMovesCount() + 1);
+                waitingMove = false;
+            }
+        }
     }
-
 
     // recibir el objeto match
     private void getMatchStatus() {
         try {
-            ObjectInputStream ooi = new ObjectInputStream(in);
             match = (Match) ooi.readObject();
         } catch (IOException e) {
             throw new RuntimeException(e);

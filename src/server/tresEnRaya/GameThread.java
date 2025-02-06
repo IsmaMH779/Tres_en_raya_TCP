@@ -18,6 +18,9 @@ public class GameThread implements Runnable{
     private Match match;
     private int playerNumber;
 
+    ObjectOutputStream oos;
+    ObjectInputStream ois;
+
     // constructor
     public GameThread(Socket clientSocket, Match match) throws IOException {
         this.clientSocket = clientSocket;
@@ -29,8 +32,10 @@ public class GameThread implements Runnable{
 
         outputMessage = new PrintStream(out);
         inputMessage = new BufferedReader(new InputStreamReader(in));
-    }
 
+        oos = new ObjectOutputStream(out);
+        ois = new ObjectInputStream(in);
+    }
 
     @Override
     public void run() {
@@ -38,45 +43,58 @@ public class GameThread implements Runnable{
         match.setPlayersCount(match.getPlayersCount() + 1);
         playerNumber = match.getPlayersCount();
 
-        while (true) {
+        while (!clientSocket.isClosed()) {
             try {
                 String clientRequest = inputMessage.readLine();
 
                 if ("GET_STATUS".equals(clientRequest)) {
                     // Cliente solicita el estado del juego
-
                     System.out.println(match.getTurn());
                     sendMatchState();
+
                 } else if ("MOVE".equals(clientRequest)) {
                     // Cliente envía su jugada
                     readMatchState();
+
+                    // registrar el movimiento
+                    plerMove();
+
                     // Enviar el estado actualizado
                     sendMatchState();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-
         }
     }
 
+    private void plerMove() {
+        GameRules gameRules = new GameRules(match.getBoard());
+        int p1 = match.getPosition()[0];
+        int p2 = match.getPosition()[1];
 
-
-    private void waitMyTurn() {
-        while (match.getTurn() != playerNumber) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        if ( gameRules.play(p1,p2,match.getTurn()) )  {
+            match.setWinner(playerNumber);
         }
+
+        match.setBoard(gameRules.getBoard());
     }
 
     private void readMatchState() {
         try {
-            ObjectInputStream ois = new ObjectInputStream(in);
-            match = (Match) ois.readObject();
+            Object obj = ois.readObject();
+
+            // compara para ver si el objeto recibido es un string o Match asi evitamos errores
+            if (obj instanceof String) {
+                String command = (String) obj;
+                System.out.println("Comando recibido: " + command);
+            } else if (obj instanceof Match) {
+                Match tempMatch = (Match) obj;
+                match.updateMatch(tempMatch);
+            } else {
+                System.out.println("Objeto desconocido recibido.");
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
@@ -86,7 +104,7 @@ public class GameThread implements Runnable{
 
     private void sendMatchState() {
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(out);
+
             oos.reset();
 
             oos.writeObject(match);
