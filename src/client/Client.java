@@ -69,6 +69,7 @@ public class Client extends Thread{
 
             if (playerNumber > 2) {
                 System.out.println("No te has podido conectar, hay dos jugadores en la partida.");
+                socket.close();
                 return;
             }
 
@@ -156,24 +157,22 @@ public class Client extends Thread{
             positionString = sc.nextLine();
 
             if (positionString.matches(regex)) {
-                waitingMove = false;
+                position = positionString.split(",");
+                int p1 = Integer.parseInt(position[0]) - 1;
+                int p2 = Integer.parseInt(position[1]) - 1;
+
+                if (match.getBoard()[p1][p2] != '-') {
+                    System.out.println("Tu jugada debe ser en un campo vacio ('-')");
+                } else {
+
+                    match.setPosition(new int[]{p1, p2});
+                    match.setTurn(match.getTurn() == 1 ? 2 : 1);
+                    match.setMovesCount(match.getMovesCount() + 1);
+                    waitingMove = false;
+                }
             } else {
                 System.out.println("\nFormato inválido.");
                 System.out.println("Normas:  Ingresa la jugada en el formato correcto: (ej. 1,1). El numero debe estar entre el 1 y el 3\n");
-            }
-
-            position = positionString.split(",");
-            int p1 = Integer.parseInt(position[0]) - 1;
-            int p2 = Integer.parseInt(position[1]) - 1;
-
-            if (match.getBoard()[p1][p2] != '-') {
-                System.out.println("Tu jugada debe ser en un campo vacio ('-')");
-            } else {
-
-                match.setPosition(new int[]{p1, p2});
-                match.setTurn(match.getTurn() == 1 ? 2 : 1);
-                match.setMovesCount(match.getMovesCount() + 1);
-                waitingMove = false;
             }
         }
     }
@@ -191,13 +190,22 @@ public class Client extends Thread{
 
     // mostrar el tablero
     private static void showBoard(Match match) {
+        char[][] board = match.getBoard();
+
         for (int i = 0; i < 3; i++) {
+            if (i > 0) {
+                System.out.println("---+---+---"); // Línea divisoria entre filas
+            }
             for (int j = 0; j < 3; j++) {
-                System.out.print(match.getBoard()[i][j]);
+                if (j > 0) {
+                    System.out.print("|"); // Separador entre columnas
+                }
+                System.out.print(" " + board[i][j] + " ");
             }
             System.out.println();
         }
     }
+
 
     public static void main(String[] args) {
         Client client = new Client("localhost", 5558);

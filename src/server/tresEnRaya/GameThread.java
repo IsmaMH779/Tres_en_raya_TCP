@@ -49,7 +49,6 @@ public class GameThread implements Runnable{
 
                 if ("GET_STATUS".equals(clientRequest)) {
                     // Cliente solicita el estado del juego
-                    System.out.println(match.getTurn());
                     sendMatchState();
 
                 } else if ("MOVE".equals(clientRequest)) {

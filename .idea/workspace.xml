@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61ab2176-118a-466d-bf40-650f8276278f" name="Changes" comment="">
+    <list default="true" id="61ab2176-118a-466d-bf40-650f8276278f" name="Changes" comment="Se han arreglado y mejorado los turnos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/Match.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/Match.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/tresEnRaya/GameRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/tresEnRaya/GameRules.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/tresEnRaya/GameThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/tresEnRaya/GameThread.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,6 +106,19 @@
       <option name="presentableId" value="Default" />
       <updated>1737284667894</updated>
     </task>
+    <task id="LOCAL-00001" summary="Se han arreglado y mejorado los turnos">
+      <option name="closed" value="true" />
+      <created>1738842499438</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1738842499438</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Se han arreglado y mejorado los turnos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Se han arreglado y mejorado los turnos" />
   </component>
 </project>
