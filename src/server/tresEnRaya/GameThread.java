@@ -56,7 +56,7 @@ public class GameThread implements Runnable{
                     readMatchState();
 
                     // registrar el movimiento
-                    plerMove();
+                    playerMove();
 
                     // Enviar el estado actualizado
                     sendMatchState();
@@ -67,7 +67,7 @@ public class GameThread implements Runnable{
         }
     }
 
-    private void plerMove() {
+    private void playerMove() {
         GameRules gameRules = new GameRules(match.getBoard());
         int p1 = match.getPosition()[0];
         int p2 = match.getPosition()[1];
@@ -82,7 +82,7 @@ public class GameThread implements Runnable{
     private void readMatchState() {
         try {
             Object obj = ois.readObject();
-
+            System.out.println(obj.toString());
             // compara para ver si el objeto recibido es un string o Match asi evitamos errores
             if (obj instanceof String) {
                 String command = (String) obj;
@@ -103,9 +103,7 @@ public class GameThread implements Runnable{
 
     private void sendMatchState() {
         try {
-
             oos.reset();
-
             oos.writeObject(match);
             out.flush();
         }

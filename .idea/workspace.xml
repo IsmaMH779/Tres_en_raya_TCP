@@ -7,6 +7,7 @@
     <list default="true" id="61ab2176-118a-466d-bf40-650f8276278f" name="Changes" comment="Se han arreglado y mejorado los turnos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/tresEnRaya/GameRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/tresEnRaya/GameRules.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/tresEnRaya/GameThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/tresEnRaya/GameThread.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,7 +115,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738842499438</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Se han arreglado y mejorado los turnos">
+      <option name="closed" value="true" />
+      <created>1738930712745</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1738930712745</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

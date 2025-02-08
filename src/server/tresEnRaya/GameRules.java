@@ -7,8 +7,6 @@ public class GameRules {
         this.board = board;
     }
 
-
-
     public boolean play(int p1, int p2, int turn) {
         // seleccionar la pieza segun el turno
         char piece = turn == 1 ? 'o' : 'x';

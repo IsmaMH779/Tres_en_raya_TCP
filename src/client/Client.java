@@ -51,8 +51,6 @@ public class Client extends Thread{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        sc = new Scanner(System.in);
     }
 
     @Override
@@ -131,7 +129,7 @@ public class Client extends Thread{
                 // Obtener el estado del juego
                 getMatchStatus();
 
-                Thread.sleep(500);
+                Thread.sleep(1000);
         }
     }
 
@@ -145,6 +143,7 @@ public class Client extends Thread{
             throw new RuntimeException(e);
         }
     }
+
     // esperar a la jugada y despues cambiar el turno del jugador
     private void playerMove() {
         boolean waitingMove = true;
@@ -192,17 +191,19 @@ public class Client extends Thread{
     private static void showBoard(Match match) {
         char[][] board = match.getBoard();
 
+        System.out.println("   1   2   3");
         for (int i = 0; i < 3; i++) {
-            if (i > 0) {
-                System.out.println("---+---+---"); // Línea divisoria entre filas
-            }
+            System.out.print((i + 1) + " ");
             for (int j = 0; j < 3; j++) {
                 if (j > 0) {
-                    System.out.print("|"); // Separador entre columnas
+                    System.out.print("|");
                 }
                 System.out.print(" " + board[i][j] + " ");
             }
             System.out.println();
+            if (i < 2) {
+                System.out.println("  ---+---+---");
+            }
         }
     }
 
